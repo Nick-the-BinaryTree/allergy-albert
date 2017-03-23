@@ -1,6 +1,6 @@
 {
-    "appSecret": "",
-    "pageAccessToken": "",
-    "validationToken": "",
-    "serverURL": ""
+    "appSecret": "9af4bccf78e7b6aefc2aea831aa12446",
+    "pageAccessToken": "EAAFwKzd34KoBAHABoENxdUizmAWX1OUj2l56QrWZCcGIJUiQWgCOwPF7dgruBkPWwZC055rBCdqmCZBTKumT7P4AZAfhKVKUSG9pCw5O3ZBliZA044ZAuZBYLt4uAetlyAFQcBZCqrvDzSZCYj66F0tZCcBpll5krvwvxT7X1WdqaZByfQZDZD",
+    "validationToken": "banana",
+    "serverURL": "https://allergy-albert.herokuapp.com/"
 }
