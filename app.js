@@ -539,7 +539,7 @@ function callSendAPI(messageData) {
 
 function createGreeting(data){
     request({
-        uri: 'https://graph.facebook.com/v2.6/me/threat_settings',
+        uri: 'https://graph.facebook.com/v2.6/me/thread_settings',
         qs: { access_token: PAGE_ACCESS_TOKEN },
         method: 'POST',
         json: data
