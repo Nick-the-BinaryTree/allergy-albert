@@ -560,6 +560,7 @@ function setGreetingText(){
             text: "Howdy {{user_first_name}}. If you have allergies, type \"allergic to:\" followed by your comma-separated allergies (i.e. \"allergic to: nuts, fish, homework\")"
         }
     };
+    createGreeting(greetingData);
 }
 
 // Start server
