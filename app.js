@@ -264,10 +264,6 @@ function receivedMessage(event) {
         sendGenericMessage(senderID);
         break;
 
-      case 'receipt':
-        sendReceiptMessage(senderID);
-        break;
-
       case 'quick reply':
         sendQuickReply(senderID);
         break;        
