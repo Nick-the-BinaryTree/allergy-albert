@@ -10,6 +10,26 @@
 /* jshint node: true, devel: true */
 'use strict';
 
+var data = {
+    "users" : [
+        {
+            "id" : "123",
+            "firstName" : "Todd",
+            "allergies" : ["nuts", "fish"],
+        }
+    ],
+    "events" : [
+        {
+            "id" : "123",
+            "name" : "My Cat's Birthday Party",
+            "eventPage" : "http://google.com",
+            "hostID" : "123",
+            "totalAllergies" : ["nuts", "fish", "strawberries"],
+            
+        }
+    ]
+};
+
 const 
   bodyParser = require('body-parser'),
   config = require('config'),
@@ -250,6 +270,8 @@ function receivedMessage(event) {
   }
 
   if (messageText) {
+      
+    
 
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
@@ -515,11 +537,37 @@ function callSendAPI(messageData) {
   });  
 }
 
+function createGreeting(data){
+    request({
+        uri: 'https://graph.facebook.com/v2.6/me/threat_settings',
+        qs: { access_token: PAGE_ACCESS_TOKEN },
+        method: 'POST',
+        json: data
+    }, function(error, response, body){
+        if(!error && response.statusCode == 200){
+            console.log("Set greeting successfully");
+        }
+        else{
+            console.error("Failed calling Thread Reference API", response.statusCode, response.statusMessage, body.error);
+        }
+    });
+}
+
+function setGreetingText(){
+    var greetingData = {
+        setting_type: "greeting",
+        greeting:{
+            text: "Howdy {{user_first_name}}. If you have allergies, type \"allergic to:\" followed by your comma-separated allergies (i.e. \"allergic to: nuts, fish, homework\")"
+        }
+    };
+}
+
 // Start server
 // Webhooks must be available via SSL with a certificate signed by a valid 
 // certificate authority.
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
+    setGreetingText();
 });
 
 module.exports = app;
