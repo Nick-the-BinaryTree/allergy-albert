@@ -440,11 +440,16 @@ function joinEvent(senderID, eventID){
         else if(event !== null && user !== null){
             for(var i = 0; i < user.allergies.length; i++){
                 var notThere = true;
-                for(var i2 = 0; i2 < event.totalAllergies.length; i2++){
-                    if(event.totalAllergies[i2] === user.allergies[i]){
-                        notThere = false;
-                        break;
+                if(event.totalAllergies !== null && event.totalAllergies !== undefined){
+                    for(var i2 = 0; i2 < event.totalAllergies.length; i2++){
+                        if(event.totalAllergies[i2] === user.allergies[i]){
+                            notThere = false;
+                            break;
+                        }
                     }
+                }
+                else{
+                    event.totalAllergies = user.allergies;
                 }
                 if(notThere){
                     event.totalAllergies.push(user.allergies[i]);
