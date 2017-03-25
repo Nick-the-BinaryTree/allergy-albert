@@ -21,7 +21,7 @@ var data = {
         {
             "id" : "123",
             "name" : "My Cat's Birthday Party",
-            "eventPage" : "http://google.com",
+            "page" : "http://google.com",
             "hostID" : "123",
             "totalAllergies" : ["nuts", "fish", "strawberries"],
             
@@ -315,6 +315,21 @@ function receivedMessage(event) {
         var text = setEventName(senderID, messageText.substring(9));
         sendTextMessage(senderID, text);
     }
+    else if (messageText.substring(0, 8) === "set link"){
+        console.log("Linking event");
+        var text = setEventPage(senderID, messageText.substring(9));
+        sendTextMessage(senderID, text);
+    }
+    else if (messageText.substring(0, 6) === "invite"){
+        console.log("Inviting");
+        var text = genInvite(senderID, messageText.substring(7));
+        sendTextMessage(senderID, text);
+    }
+    else if (messageText.substring(0, 6) === "delete"){
+        console.log("Deleting event");
+        var text = deleteEvent(senderID, messageText.substring(7));
+        sendTextMessage(senderID, text);
+    }
     else{
         switch (messageText) {
 
@@ -473,20 +488,26 @@ function eventSetup(senderID, eventID){
 }
 
 function setEventName(senderID, text){
+    return setEventItem(senderID, text, "name");
+}
+
+function setEventPage(senderID, text){
+    return setEventItem(senderID, text, "page");
+}
+
+function setEventItem(senderID, text, item){
     try{
-        console.log(text);
         var eventData = text.split(",");
-        console.log(eventData);
         var eventID = eventData[0];
-        var eventName = eventData[1];
+        var eventItem = eventData[1];
 
         var event = findEvent(eventID);
         if (event){
-            event.name = eventName;
-            return "Event name set."
+            event[item] = eventItem;
+            return "Event updated."
         }
         
-        return "Is there a comma between id and name?\nEvent not found :(";
+        return "Is there a comma between id and the item?\nEvent not found :(";
     }
     catch(e){
         console.log(e);
@@ -494,12 +515,41 @@ function setEventName(senderID, text){
     return "Something went wrong.";
 }
 
-function setEventPage(senderID, eventID){
-    
+function genInvite(senderID, eventID){
+    msg = "";
+    try{
+        event = findEvent(eventID);
+        if(event){
+            if(event.name !== undefined){
+                msg += "Come to " += event.name + ". ";
+            }
+            if(event.page !== undefined){
+                msg += "Here's the event page: " += event.page + ". ";
+            }
+            msg += "If you have allergies, go to the Allergy Albert Facebook page, and type \"join " + event.id +"\""
+            
+        }
+        return msg;
+    }
+    catch(e){
+        console.log(e);
+    }
+    return "Something went wrong";
 }
 
-function genInvite(senderID, eventID){
-    
+function deleteEvent(senderID, eventID){
+    try{
+        for(var i = 0; i < data.events.length; i++){
+            if(eventID === data.events[i].id){
+                data.events.splice(i, 1);
+                break;
+            }
+        }
+    }
+    catch(e){
+        console.log(e);
+    }
+    return "Something went wrong. Does that event exist?";
 }
 
 
