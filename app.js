@@ -354,7 +354,7 @@ function setAllergies(text, senderID){
     try {
         var allergies = text.substring(15);
         allergies = allergies.split(",");
-        user = findUser(senderID);
+        var user = findUser(senderID);
         if(user === null){
             user = {"id":senderID, "allergies":allergies};
             data.users.push(user);
