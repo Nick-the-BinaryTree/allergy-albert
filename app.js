@@ -461,7 +461,8 @@ function joinEvent(senderID, eventID){
 
 function allergyInfo(senderID, text){
     try{
-        var eventID = text.substring(14);
+        console.log(text);
+        var eventID = text.substring(13);
         var event = findEvent(eventID);
         if(event !== null){
             return event.totalAllergies.join(" ");
