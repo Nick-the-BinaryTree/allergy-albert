@@ -312,7 +312,8 @@ function receivedMessage(event) {
     }
     else if (messageText.substring(0, 8) === "set name"){
         console.log("Naming event");
-        setEventName(senderID, messageText.substring(9));
+        var text = setEventName(senderID, messageText.substring(9));
+        sendTextMessage(senderID, text);
     }
     else{
         switch (messageText) {
@@ -461,8 +462,9 @@ function allergyInfo(senderID, text){
 }
 
 function eventSetup(senderID, eventID){
+    console.log(eventID);
     if(eventID === null){
-        var eventID = data.count;
+        eventID = data.count;
         data.events.push({id : eventID});
         joinEvent(senderID, eventID);
         data.count++;
@@ -472,7 +474,9 @@ function eventSetup(senderID, eventID){
 
 function setEventName(senderID, text){
     try{
+        console.log(text);
         var eventData = text.split(",");
+        console.log(eventData);
         var eventID = eventData[0];
         var eventName = eventData[1];
 
