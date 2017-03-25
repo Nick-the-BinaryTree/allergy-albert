@@ -471,8 +471,8 @@ function allergyInfo(senderID, text){
         var eventID = text.substring(13);
         var event = findEvent(eventID);
         if(event !== null){
-            if(events.totalAllergies !== null && events.totalAllergies !== undefined){
-                return events.totalAllergies.join(" ");
+            if(event.totalAllergies !== null && event.totalAllergies !== undefined){
+                return event.totalAllergies.join(" ");
             }
             else{
                 return "No one has allergies at this event!";
