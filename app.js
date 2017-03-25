@@ -497,21 +497,24 @@ function setEventPage(senderID, text){
 
 function setEventItem(senderID, text, item){
     try{
-        var eventData = text.split(",");
+        console.log(text);
+        var eventData = text.split(", ");
         console.log(eventData);
         var eventID = eventData[0];
         var eventItem = eventData[1];
 
         var event = findEvent(eventID);
         
-        if(senderID === event.hostID)
-        
-        if (event !== null){
-            event[item] = eventItem;
-            return "Event updated."
+        if(senderID === event.hostID){
+            if (event !== null){
+                event[item] = eventItem;
+                return "Event updated."
+            }
+            return "Is there a comma between id and the item?\nEvent not found :(";
         }
-        
-        return "Is there a comma between id and the item?\nEvent not found :(";
+        else{
+            return "You're not a host of this event";
+        }
     }
     catch(e){
         console.log(e);
