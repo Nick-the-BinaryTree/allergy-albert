@@ -462,21 +462,21 @@ function allergyInfo(senderID, text){
 
 function eventSetup(senderID, eventID){
     if(eventID === null){
-        eventID = data.events.count;
+        var eventID = data.count;
         data.events.push({id : eventID});
         joinEvent(senderID, eventID);
-        data.events.count++;
+        data.count++;
     }
     sendQuickReply(senderID, eventID);
 }
 
 function setEventName(senderID, text){
     try{
-        eventData = text.split(",");
-        eventID = eventData[0];
-        eventName = eventData[1];
+        var eventData = text.split(",");
+        var eventID = eventData[0];
+        var eventName = eventData[1];
 
-        event = findEvent(eventID);
+        var event = findEvent(eventID);
         if (event){
             event.name = eventName;
             return "Event name set."
