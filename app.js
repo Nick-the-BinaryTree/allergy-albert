@@ -477,7 +477,7 @@ function setEventName(senderID, text){
         eventName = eventData[1];
 
         event = findEvent(eventID);
-        if event{
+        if (event){
             event.name = eventName;
             return "Event name set."
         }
