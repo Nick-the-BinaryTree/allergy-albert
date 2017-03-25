@@ -455,10 +455,7 @@ function joinEvent(senderID, eventID){
                     event.totalAllergies.push(user.allergies[i]);
                 }
             }
-            if (event.name !== undefined){
-                return "Joined " + event.name;
-            }
-            return "Joined";
+            return "Joined.";
         }
         else{
             return "Event didn't exist :(";
@@ -480,7 +477,7 @@ function allergyInfo(senderID, text){
                 return event.totalAllergies.join(" ");
             }
             else{
-                return "No one has allergies at this event!";
+                return "No one has allergies at this event.";
             }
         }
         else{
