@@ -370,7 +370,7 @@ function setAllergies(senderID, text){
         console.log("Janky input");
         console.log(e);
     }
-    return "Something went wrong";
+    return "Something went wrong.";
 }
 
 function deleteUser(senderID){
@@ -385,11 +385,13 @@ function deleteUser(senderID){
 
 function joinEvent(senderID, text){
     try{
+        console.log("Got here 1");
         var user = findUser(senderID);
+        console.log("Got here 2");
         var eventID = text.substring(5);
         var event = findEvent(eventID);
+        console.log("Got here 3");
         if(event !== null && user === null){
-            console.log("Got here");
             return "Joined " + event.name;
         }
         else if(event !== null && user !== null){
@@ -414,7 +416,7 @@ function joinEvent(senderID, text){
     catch(e){
         console.log(e);
     }
-    return "Something went wrong";
+    return "Something went wrong.";
 }
 
 
