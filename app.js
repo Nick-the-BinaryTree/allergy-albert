@@ -14,7 +14,6 @@ var data = {
     "users" : [
         {
             "id" : "123",
-            "firstName" : "Todd",
             "allergies" : ["nuts", "fish"],
         }
     ],
@@ -271,11 +270,22 @@ function receivedMessage(event) {
 
   if (messageText) {
       
-    
+    messageText = messageText.toLowerCase()
 
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
     // the text we received.
+    
+    if (messageText.substring(0,4) === "join"){
+        joinEvent(messageText, senderID);
+    }
+    else if (messageText.substring(0,13) === "set allergies:"){
+        console.log("Pass");
+    }
+    else if (messageText.substring(0,13) === "edit"){
+        console.log("Pass");
+    }
+    
     switch (messageText) {
 
       case 'button':
@@ -288,14 +298,105 @@ function receivedMessage(event) {
 
       case 'quick reply':
         sendQuickReply(senderID);
-        break;        
-
+        break;
+            
+      case 'host':
+        //eventSetup();
+        break;
+            
+      case 'help':
+        text = "To host an event, type \"host\" | To join an event, type \"join {event id}\" | To set your allergies, type \"set allergies: {allergies separated by commas}\" | For more help, type \"help 2\""; 
+        sendTextMessage(senderID, text);
+        break;
+            
+      case 'help 2':
+        text = "To edit an event (must be host), type \"edit {event code}\" | To delete an event (must be host), type \"delete {event code}\", | To wipe your account, type \"game over\"";
+        sendTextMessage(senderID, text);
+        break;
+            
+      case 'game over':
+        deleteUser(senderID);
+        text = "Your information has been removed.";
+        sendTextMessage(senderID, text);
+        break;
+            
+      case 'debug':
+        text = JSON.stringify(data);
+        sendTextMessage(senderID, text);
+        break;
+            
       default:
-        sendTextMessage(senderID, messageText);
+        sendTextMessage(senderID, "Didn't get that. Type \"help\" for commands.");
     }
-  } else if (messageAttachments) {
-    sendTextMessage(senderID, "Message with attachment received");
   }
+}
+
+function findUser(senderID){
+    for(var i = 0; i < data.users.length; i++){
+        if(data.users[i].id===senderID){
+            return data.users[i];
+        }
+    }
+    return null
+}
+function findEvent(eventID){
+    for(var i = 0; i < data.events.length; i++){
+        if(data.events[i].id===senderID){
+            return data.events[i];
+        }
+    }
+    return null
+}
+
+function setAllergies(text, senderID){
+    try {
+        allergies = text.substring(15);
+        allergies = allergies.split(",");
+        user = findUser(senderID);
+        if user === null{
+            user = {"id":senderID, "allergies":allergies};
+            data.users.push(user);
+        }
+        else{
+            user.allergies = allergies;
+        }
+    }
+    catch(e){
+        console.log("Janky input");
+        console.log(e);
+    }
+}
+
+function deleteUser(senderID){
+    for(var i = 0; i < data.users.length; i++){
+        if(data.users[i].id===senderID){
+            data.users.splice(i, 1);
+            break;
+        }
+    }
+}
+
+function joinEvent(text, senderID){
+    try{
+        var user = findUser(senderID);
+        var eventID = text.substring(5);
+        var event = findEvent(eventID);
+        for(var i = 0; i < user.allergies.length; i++){
+            var notThere = true;
+            for(var i2 = 0; i2 < event.totalAllergies.length; i2++){
+                if(event.totalAllergies[i2] === user.allergies[i]){
+                    notThere = false;
+                    break;
+                }
+            }
+            if(notThere){
+                event.totalAllergies.push(user.allergies[i]);
+            }
+        }
+    }
+    catch(e){
+        console.log(e);
+    }
 }
 
 
@@ -557,7 +658,7 @@ function setGreetingText(){
     var greetingData = {
         setting_type: "greeting",
         greeting:{
-            text: "Howdy {{user_first_name}}. If you have allergies, type \"allergic to:\" followed by your comma-separated allergies (i.e. \"allergic to: nuts, fish, homework\")"
+            text: "Howdy {{user_first_name}}. If you have allergies, type \"set allergies:\" followed by your comma-separated allergies (i.e. \"set allergies: nuts, fish, homework\")"
         }
     };
     createGreeting(greetingData);
