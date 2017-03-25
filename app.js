@@ -277,6 +277,7 @@ function receivedMessage(event) {
     // the text we received.
     
     if (messageText.substring(0,4) === "join"){
+        console.log("Join event");
         joinEvent(messageText, senderID);
     }
     else if (messageText.substring(0,13) === "set allergies:"){
