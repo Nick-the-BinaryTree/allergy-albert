@@ -379,20 +379,23 @@ function deleteUser(senderID){
 }
 
 function joinEvent(text, senderID){
+    console.log(senderID);
     try{
         var user = findUser(senderID);
         var eventID = text.substring(5);
         var event = findEvent(eventID);
-        for(var i = 0; i < user.allergies.length; i++){
-            var notThere = true;
-            for(var i2 = 0; i2 < event.totalAllergies.length; i2++){
-                if(event.totalAllergies[i2] === user.allergies[i]){
-                    notThere = false;
-                    break;
+        if event !== null and user !== null{
+            for(var i = 0; i < user.allergies.length; i++){
+                var notThere = true;
+                for(var i2 = 0; i2 < event.totalAllergies.length; i2++){
+                    if(event.totalAllergies[i2] === user.allergies[i]){
+                        notThere = false;
+                        break;
+                    }
                 }
-            }
-            if(notThere){
-                event.totalAllergies.push(user.allergies[i]);
+                if(notThere){
+                    event.totalAllergies.push(user.allergies[i]);
+                }
             }
         }
     }
