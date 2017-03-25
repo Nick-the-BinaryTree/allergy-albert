@@ -272,7 +272,7 @@ function receivedMessage(event) {
         sendTextMessage(senderID, "To link to an event page, type \"set page {event code, new link}\"");
     }
     else if(quickReplyPayload === "invite"){
-        sendTextMessage(senderID, "To generate invitations to an event, type \"get invite {event code}\"");
+        sendTextMessage(senderID, "To generate invitations to an event, type \"invite {event code}\"");
     }
     else if(quickReplyPayload === "delete"){
         sendTextMessage(senderID, "To delete an event (must be host), type \"delete {event code}\"");
@@ -296,7 +296,7 @@ function receivedMessage(event) {
         var text = joinEvent(senderID, eventID);
         sendTextMessage(senderID, text);
     }
-    else if (messageText.substring(0,14) === "set allergies:"){
+    else if (messageText.substring(0,13) === "set allergies"){
         console.log("Setting allergies");
         var text = setAllergies(senderID, messageText);
         sendTextMessage(senderID, text);
@@ -398,7 +398,7 @@ function findEvent(eventID){
 
 function setAllergies(senderID, text){
     try {
-        var allergies = text.substring(15);
+        var allergies = text.substring(14);
         allergies = allergies.split(",");
         var user = findUser(senderID);
         if(user === null){
@@ -525,8 +525,8 @@ function setEventItem(senderID, text, item){
 function genInvite(senderID, eventID){
     try{
         var msg = "";
-        event = findEvent(eventID);
-        if(event !== undefined){
+        var event = findEvent(eventID);
+        if(event !== null){
             if(event.name !== undefined){
                 msg += "Come to " + event.name + ". ";
             }
