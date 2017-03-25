@@ -384,7 +384,7 @@ function joinEvent(text, senderID){
         var user = findUser(senderID);
         var eventID = text.substring(5);
         var event = findEvent(eventID);
-        if event !== null and user !== null{
+        if(event !== null && user !== null){
             for(var i = 0; i < user.allergies.length; i++){
                 var notThere = true;
                 for(var i2 = 0; i2 < event.totalAllergies.length; i2++){
