@@ -280,11 +280,12 @@ function receivedMessage(event) {
         console.log("Join event");
         joinEvent(messageText, senderID);
     }
-    else if (messageText.substring(0,13) === "set allergies:"){
-        console.log("Pass");
+    else if (messageText.substring(0,14) === "set allergies:"){
+        console.log("Setting allergies");
+        setAllergies(messageText, senderID);
     }
-    else if (messageText.substring(0,13) === "edit"){
-        console.log("Pass");
+    else if (messageText.substring(0,4) === "edit"){
+        console.log("Edit event");
     }
     
     switch (messageText) {
