@@ -352,7 +352,7 @@ function findEvent(eventID){
 
 function setAllergies(text, senderID){
     try {
-        allergies = text.substring(15);
+        var allergies = text.substring(15);
         allergies = allergies.split(",");
         user = findUser(senderID);
         if(user === null){
