@@ -521,7 +521,7 @@ function genInvite(senderID, eventID){
         event = findEvent(eventID);
         if(event){
             if(event.name !== undefined){
-                msg += "Come to " += event.name + ". ";
+                msg += "Come to " + event.name + ". ";
             }
             if(event.page !== undefined){
                 msg += "Here's the event page: " + event.page + ". ";
