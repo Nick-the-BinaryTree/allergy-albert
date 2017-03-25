@@ -292,7 +292,7 @@ function receivedMessage(event) {
     
     if (messageText.substring(0,4) === "join"){
         console.log("Join event");
-        var eventID = text.substring(5);
+        var eventID = messageText.substring(5);
         var text = joinEvent(senderID, eventID);
         sendTextMessage(senderID, text);
     }
