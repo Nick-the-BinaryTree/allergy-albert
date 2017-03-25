@@ -479,7 +479,7 @@ function allergyInfo(senderID, text){
 function eventSetup(senderID, eventID){
     console.log(eventID);
     if(eventID === null){
-        eventID = data.count;
+        eventID = String(data.count);
         data.events.push({id : eventID, hostID: senderID});
         joinEvent(senderID, eventID);
         data.count++;
@@ -497,13 +497,13 @@ function setEventPage(senderID, text){
 
 function setEventItem(senderID, text, item){
     try{
-        console.log(text);
         var eventData = text.split(", ");
         console.log(eventData);
         var eventID = eventData[0];
         var eventItem = eventData[1];
 
         var event = findEvent(eventID);
+        
         
         if(senderID === event.hostID){
             if (event !== null){
