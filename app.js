@@ -334,7 +334,7 @@ function receivedMessage(event) {
             break;
 
           case 'host':
-            eventSetup(senderID);
+            eventSetup(senderID, null);
             break;
 
           case 'help':
@@ -452,7 +452,7 @@ function allergyInfo(senderID, text){
             return event.totalAllergies.join(" ");
         }
         else{
-            return "Event didn't exist :(";
+            return "Event doesn't exist :(";
         }
     }
     catch(e){
@@ -486,7 +486,7 @@ function setEventName(senderID, text){
             return "Event name set."
         }
         
-        return "Event not found :(";
+        return "Is there a comma between id and name?\nEvent not found :(";
     }
     catch(e){
         console.log(e);
