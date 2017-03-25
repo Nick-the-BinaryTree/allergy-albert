@@ -270,7 +270,7 @@ function receivedMessage(event) {
 
   if (messageText) {
       
-    messageText = messageText.toLowerCase()
+    messageText = messageText.toLowerCase();
 
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
@@ -278,57 +278,59 @@ function receivedMessage(event) {
     
     if (messageText.substring(0,4) === "join"){
         console.log("Join event");
-        joinEvent(messageText, senderID);
+        var text = joinEvent(senderID, messageText);
+        sendTextMessage(senderID, text);
     }
     else if (messageText.substring(0,14) === "set allergies:"){
         console.log("Setting allergies");
-        setAllergies(messageText, senderID);
+        var text = setAllergies(senderID, messageText);
+        sendTextMessage(senderID, text);
     }
     else if (messageText.substring(0,4) === "edit"){
         console.log("Edit event");
     }
-    
-    switch (messageText) {
+    else{
+        switch (messageText) {
 
-      case 'button':
-        sendButtonMessage(senderID);
-        break;
+          case 'button':
+            sendButtonMessage(senderID);
+            break;
 
-      case 'generic':
-        sendGenericMessage(senderID);
-        break;
+          case 'generic':
+            sendGenericMessage(senderID);
+            break;
 
-      case 'quick reply':
-        sendQuickReply(senderID);
-        break;
-            
-      case 'host':
-        //eventSetup();
-        break;
-            
-      case 'help':
-        var text = "To host an event, type \"host\" | To join an event, type \"join {event id}\" | To set your allergies, type \"set allergies: {allergies separated by commas}\" | For more help, type \"help 2\""; 
-        sendTextMessage(senderID, text);
-        break;
-            
-      case 'help 2':
-        var text = "To edit an event (must be host), type \"edit {event code}\" | To delete an event (must be host), type \"delete {event code}\", | To wipe your account, type \"game over\"";
-        sendTextMessage(senderID, text);
-        break;
-            
-      case 'game over':
-        deleteUser(senderID);
-        var text = "Your information has been removed.";
-        sendTextMessage(senderID, text);
-        break;
-            
-      case 'debug':
-        var text = JSON.stringify(data);
-        sendTextMessage(senderID, text);
-        break;
-            
-      default:
-        sendTextMessage(senderID, "Didn't get that. Type \"help\" for commands.");
+          case 'quick reply':
+            sendQuickReply(senderID);
+            break;
+
+          case 'host':
+            //eventSetup();
+            break;
+
+          case 'help':
+            var text = "To host an event, type \"host\" | To join an event, type \"join {event id}\" | To set your allergies, type \"set allergies: {allergies separated by commas}\" | For more help, type \"help 2\""; 
+            sendTextMessage(senderID, text);
+            break;
+
+          case 'help 2':
+            var text = "To edit an event (must be host), type \"edit {event code}\" | To delete an event (must be host), type \"delete {event code}\", | To wipe your account, type \"game over\"";
+            sendTextMessage(senderID, text);
+            break;
+
+          case 'game over':
+            var text = deleteUser(senderID);
+            sendTextMessage(senderID, text);
+            break;
+
+          case 'debug':
+            var text = JSON.stringify(data);
+            sendTextMessage(senderID, text);
+            break;
+
+          default:
+            sendTextMessage(senderID, "Didn't get that. Type \"help\" for commands.");
+        }
     }
   }
 }
@@ -339,7 +341,7 @@ function findUser(senderID){
             return data.users[i];
         }
     }
-    return null
+    return null;
 }
 function findEvent(eventID){
     for(var i = 0; i < data.events.length; i++){
@@ -347,10 +349,10 @@ function findEvent(eventID){
             return data.events[i];
         }
     }
-    return null
+    return null;
 }
 
-function setAllergies(text, senderID){
+function setAllergies(senderID, text){
     try {
         var allergies = text.substring(15);
         allergies = allergies.split(",");
@@ -376,15 +378,18 @@ function deleteUser(senderID){
             break;
         }
     }
+    return "Your information has been removed.";
 }
 
-function joinEvent(text, senderID){
-    console.log(senderID);
+function joinEvent(senderID, text){
     try{
         var user = findUser(senderID);
         var eventID = text.substring(5);
         var event = findEvent(eventID);
-        if(event !== null && user !== null){
+        if(event !== null && user === null){
+            return "Joined " + event.name;
+        }
+        else if(event !== null && user !== null){
             for(var i = 0; i < user.allergies.length; i++){
                 var notThere = true;
                 for(var i2 = 0; i2 < event.totalAllergies.length; i2++){
@@ -397,6 +402,10 @@ function joinEvent(text, senderID){
                     event.totalAllergies.push(user.allergies[i]);
                 }
             }
+            return "Joinecd " + event.name;
+        }
+        else{
+            return "Event didn't exist :(";
         }
     }
     catch(e){
