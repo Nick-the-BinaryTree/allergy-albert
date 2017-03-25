@@ -385,10 +385,10 @@ function deleteUser(senderID){
 
 function joinEvent(senderID, text){
     try{
+        var user = findUser(senderID)
         console.log("Got here 1");
-        var user = findUser(senderID);
-        console.log("Got here 2");
         var eventID = text.substring(5);
+        console.log("Got here 2");
         var event = findEvent(eventID);
         console.log("Got here 3");
         if(event !== null && user === null){
