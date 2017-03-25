@@ -334,8 +334,8 @@ function receivedMessage(event) {
         switch (messageText) {
 
           case 'hi':
-                sendTextMessage(senderID, 'oh hi');
-                break;
+            sendTextMessage(senderID, 'oh hi');
+            break;
           case 'button':
             sendButtonMessage(senderID);
             break;
@@ -480,7 +480,7 @@ function eventSetup(senderID, eventID){
     console.log(eventID);
     if(eventID === null){
         eventID = data.count;
-        data.events.push({id : eventID});
+        data.events.push({id : eventID, hostID: senderID});
         joinEvent(senderID, eventID);
         data.count++;
     }
@@ -498,11 +498,15 @@ function setEventPage(senderID, text){
 function setEventItem(senderID, text, item){
     try{
         var eventData = text.split(",");
+        console.log(eventData);
         var eventID = eventData[0];
         var eventItem = eventData[1];
 
         var event = findEvent(eventID);
-        if (event !== undefined){
+        
+        if(senderID === event.hostID)
+        
+        if (event !== null){
             event[item] = eventItem;
             return "Event updated."
         }
