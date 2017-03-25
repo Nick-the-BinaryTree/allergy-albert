@@ -502,7 +502,7 @@ function setEventItem(senderID, text, item){
         var eventItem = eventData[1];
 
         var event = findEvent(eventID);
-        if (event){
+        if (event !== undefined){
             event[item] = eventItem;
             return "Event updated."
         }
@@ -519,7 +519,7 @@ function genInvite(senderID, eventID){
     try{
         var msg = "";
         event = findEvent(eventID);
-        if(event){
+        if(event !== undefined){
             if(event.name !== undefined){
                 msg += "Come to " + event.name + ". ";
             }
@@ -527,9 +527,8 @@ function genInvite(senderID, eventID){
                 msg += "Here's the event page: " + event.page + ". ";
             }
             msg += "If you have allergies, go to the Allergy Albert Facebook page, and type \"join " + event.id +"\""
-            
+            return msg;    
         }
-        return msg;
     }
     catch(e){
         console.log(e);
