@@ -524,7 +524,7 @@ function genInvite(senderID, eventID){
                 msg += "Come to " += event.name + ". ";
             }
             if(event.page !== undefined){
-                msg += "Here's the event page: " += event.page + ". ";
+                msg += "Here's the event page: " + event.page + ". ";
             }
             msg += "If you have allergies, go to the Allergy Albert Facebook page, and type \"join " + event.id +"\""
             
