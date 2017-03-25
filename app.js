@@ -26,7 +26,8 @@ var data = {
             "totalAllergies" : ["nuts", "fish", "strawberries"],
             
         }
-    ]
+    ],
+    'count' : 1000
 };
 
 const 
@@ -263,6 +264,19 @@ function receivedMessage(event) {
     var quickReplyPayload = quickReply.payload;
     console.log("Quick reply for message %s with payload %s",
       messageId, quickReplyPayload);
+      
+    if(quickReplyPayload === "eventName"){
+        sendTextMessage(senderID, "To set your event name, type \"set name {event code, new name}\"");
+    }
+    else if(quickReplyPayload === "eventPage"){
+        sendTextMessage(senderID, "To link to an event page, type \"set link {event code, new link}\"");
+    }
+    else if(quickReplyPayload === "invite"){
+        sendTextMessage(senderID, "To generate invitations to an event, type \"get invite {event code}\"");
+    }
+    else if(quickReplyPayload === "delete"){
+        sendTextMessage(senderID, "To delete an event (must be host), type \"delete {event code}\"");
+    }
 
     sendTextMessage(senderID, "Quick reply tapped");
     return;
@@ -278,7 +292,8 @@ function receivedMessage(event) {
     
     if (messageText.substring(0,4) === "join"){
         console.log("Join event");
-        var text = joinEvent(senderID, messageText);
+        var eventID = text.substring(5);
+        var text = joinEvent(senderID, eventID);
         sendTextMessage(senderID, text);
     }
     else if (messageText.substring(0,14) === "set allergies:"){
@@ -288,10 +303,23 @@ function receivedMessage(event) {
     }
     else if (messageText.substring(0,4) === "edit"){
         console.log("Edit event");
+        eventSetup(senderID, messageText.substring(5));
+    }
+    else if (messageText.substring(0,12) === "allergy info"){
+        console.log("Allergy info for event");
+        var text = allergyInfo(senderID, messageText);
+        sendTextMessage(senderID, text);
+    }
+    else if (messageText.substring(0, 8) === "set name"){
+        console.log("Naming event");
+        setEventName(senderID, messageText.substring(9));
     }
     else{
         switch (messageText) {
 
+          case 'hi':
+                sendTextMessage(senderID, 'oh hi');
+                break;
           case 'button':
             sendButtonMessage(senderID);
             break;
@@ -305,16 +333,16 @@ function receivedMessage(event) {
             break;
 
           case 'host':
-            //eventSetup();
+            eventSetup(senderID);
             break;
 
           case 'help':
             var text = "To host an event, type \"host\" | To join an event, type \"join {event id}\" | To set your allergies, type \"set allergies: {allergies separated by commas}\" | For more help, type \"help 2\""; 
             sendTextMessage(senderID, text);
             break;
-
+                
           case 'help 2':
-            var text = "To edit an event (must be host), type \"edit {event code}\" | To delete an event (must be host), type \"delete {event code}\", | To wipe your account, type \"game over\"";
+            var text = "To edit an event (must be host), type \"edit {event code}\" | To see the allergy information for an event, type \"allergy info {event id}\" | To wipe your account, type \"game over\""; 
             sendTextMessage(senderID, text);
             break;
 
@@ -345,7 +373,7 @@ function findUser(senderID){
 }
 function findEvent(eventID){
     for(var i = 0; i < data.events.length; i++){
-        if(data.events[i].id===senderID){
+        if(data.events[i].id===eventID){
             return data.events[i];
         }
     }
@@ -383,14 +411,10 @@ function deleteUser(senderID){
     return "Your information has been removed.";
 }
 
-function joinEvent(senderID, text){
+function joinEvent(senderID, eventID){
     try{
         var user = findUser(senderID)
-        console.log("Got here 1");
-        var eventID = text.substring(5);
-        console.log("Got here 2");
         var event = findEvent(eventID);
-        console.log("Got here 3");
         if(event !== null && user === null){
             return "Joined " + event.name;
         }
@@ -417,6 +441,61 @@ function joinEvent(senderID, text){
         console.log(e);
     }
     return "Something went wrong.";
+}
+
+function allergyInfo(senderID, text){
+    try{
+        var eventID = text.substring(14);
+        var event = findEvent(eventID);
+        if(event !== null){
+            return event.totalAllergies.join(" ");
+        }
+        else{
+            return "Event didn't exist :(";
+        }
+    }
+    catch(e){
+        console.log(e);
+    }
+    return "Something went wrong.";
+}
+
+function eventSetup(senderID, eventID){
+    if(eventID === null){
+        eventID = data.events.count;
+        data.events.push({id : eventID});
+        joinEvent(senderID, eventID);
+        data.events.count++;
+    }
+    sendQuickReply(senderID, eventID);
+}
+
+function setEventName(senderID, text){
+    try{
+        eventData = text.split(",");
+        eventID = eventData[0];
+        eventName = eventData[1];
+
+        event = findEvent(eventID);
+        if event{
+            event.name = eventName;
+            return "Event name set."
+        }
+        
+        return "Event not found :(";
+    }
+    catch(e){
+        console.log(e);
+    }
+    return "Something went wrong.";
+}
+
+function setEventPage(senderID, eventID){
+    
+}
+
+function genInvite(senderID, eventID){
+    
 }
 
 
@@ -467,7 +546,8 @@ function receivedPostback(event) {
 
   // When a postback is called, we'll send a message back to the sender to 
   // let them know it was successful
-  sendTextMessage(senderID, "Postback called");
+ 
+  //sendTextMessage(senderID, "Postback called");
 }
 
 /*
@@ -598,27 +678,32 @@ function sendGenericMessage(recipientId) {
  * Send a message with Quick Reply buttons.
  *
  */
-function sendQuickReply(recipientId) {
+function sendQuickReply(recipientId, eventID) {
   var messageData = {
     recipient: {
       id: recipientId
     },
     message: {
-      text: "What's your favorite movie genre?",
+      text: "Your eventID is " + eventID + ". What would you like to do?",
       quick_replies: [
         {
           "content_type":"text",
-          "title":"Action",
+          "title":"Name the event.",
           "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_ACTION"
         },
         {
           "content_type":"text",
-          "title":"Comedy",
+          "title":"Edit the event page link.",
           "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY"
         },
         {
           "content_type":"text",
-          "title":"Drama",
+          "title":"Invite people!",
+          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY"
+        },
+        {
+          "content_type":"text",
+          "title":"Delete the event",
           "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_DRAMA"
         }
       ]
