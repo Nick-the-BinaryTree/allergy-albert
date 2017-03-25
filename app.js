@@ -278,7 +278,7 @@ function receivedMessage(event) {
         sendTextMessage(senderID, "To delete an event (must be host), type \"delete {event code}\"");
     }
 
-    sendTextMessage(senderID, "Quick reply tapped");
+    //sendTextMessage(senderID, "Quick reply tapped");
     return;
   }
 
@@ -689,22 +689,22 @@ function sendQuickReply(recipientId, eventID) {
         {
           "content_type":"text",
           "title":"Name the event.",
-          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_ACTION"
+          "payload":"eventName"
         },
         {
           "content_type":"text",
-          "title":"Edit the event page link.",
-          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY"
+          "title":"Edit event page link.",
+          "payload":"eventPage"
         },
         {
           "content_type":"text",
           "title":"Invite people!",
-          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY"
+          "payload":"invite"
         },
         {
           "content_type":"text",
           "title":"Delete the event",
-          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_DRAMA"
+          "payload":"delete"
         }
       ]
     }
