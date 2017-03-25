@@ -269,7 +269,7 @@ function receivedMessage(event) {
         sendTextMessage(senderID, "To set your event name, type \"set name {event code, new name}\"");
     }
     else if(quickReplyPayload === "eventPage"){
-        sendTextMessage(senderID, "To link to an event page, type \"set link {event code, new link}\"");
+        sendTextMessage(senderID, "To link to an event page, type \"set page {event code, new link}\"");
     }
     else if(quickReplyPayload === "invite"){
         sendTextMessage(senderID, "To generate invitations to an event, type \"get invite {event code}\"");
@@ -315,7 +315,7 @@ function receivedMessage(event) {
         var text = setEventName(senderID, messageText.substring(9));
         sendTextMessage(senderID, text);
     }
-    else if (messageText.substring(0, 8) === "set link"){
+    else if (messageText.substring(0, 8) === "set page"){
         console.log("Linking event");
         var text = setEventPage(senderID, messageText.substring(9));
         sendTextMessage(senderID, text);
@@ -516,8 +516,8 @@ function setEventItem(senderID, text, item){
 }
 
 function genInvite(senderID, eventID){
-    msg = "";
     try{
+        var msg = "";
         event = findEvent(eventID);
         if(event){
             if(event.name !== undefined){
