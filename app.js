@@ -306,23 +306,23 @@ function receivedMessage(event) {
         break;
             
       case 'help':
-        text = "To host an event, type \"host\" | To join an event, type \"join {event id}\" | To set your allergies, type \"set allergies: {allergies separated by commas}\" | For more help, type \"help 2\""; 
+        var text = "To host an event, type \"host\" | To join an event, type \"join {event id}\" | To set your allergies, type \"set allergies: {allergies separated by commas}\" | For more help, type \"help 2\""; 
         sendTextMessage(senderID, text);
         break;
             
       case 'help 2':
-        text = "To edit an event (must be host), type \"edit {event code}\" | To delete an event (must be host), type \"delete {event code}\", | To wipe your account, type \"game over\"";
+        var text = "To edit an event (must be host), type \"edit {event code}\" | To delete an event (must be host), type \"delete {event code}\", | To wipe your account, type \"game over\"";
         sendTextMessage(senderID, text);
         break;
             
       case 'game over':
         deleteUser(senderID);
-        text = "Your information has been removed.";
+        var text = "Your information has been removed.";
         sendTextMessage(senderID, text);
         break;
             
       case 'debug':
-        text = JSON.stringify(data);
+        var text = JSON.stringify(data);
         sendTextMessage(senderID, text);
         break;
             
