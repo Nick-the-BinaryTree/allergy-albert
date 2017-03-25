@@ -435,7 +435,7 @@ function joinEvent(senderID, eventID){
         var user = findUser(senderID)
         var event = findEvent(eventID);
         if(event !== null && user === null){
-            return "Joined " + event.name;
+            return "Joined.";
         }
         else if(event !== null && user !== null){
             for(var i = 0; i < user.allergies.length; i++){
