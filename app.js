@@ -274,6 +274,9 @@ function receivedMessage(event) {
     else if(quickReplyPayload === "invite"){
         sendTextMessage(senderID, "To generate invitations to an event, type \"invite {event code}\"");
     }
+    else if(quickReplyPayload === "allergy info"){
+        sendTextMessage(senderID, "To view guest allergies for an event, type \"allergy info {event code}\"");
+    }
     else if(quickReplyPayload === "delete"){
         sendTextMessage(senderID, "To delete an event (must be host), type \"delete {event code}\"");
     }
@@ -447,7 +450,10 @@ function joinEvent(senderID, eventID){
                     event.totalAllergies.push(user.allergies[i]);
                 }
             }
-            return "Joinecd " + event.name;
+            if (event.name !== undefined){
+                return "Joined " + event.name;
+            }
+            return "Joined";
         }
         else{
             return "Event didn't exist :(";
@@ -749,22 +755,27 @@ function sendQuickReply(recipientId, eventID) {
       quick_replies: [
         {
           "content_type":"text",
-          "title":"Name the event.",
+          "title":"Name it.",
           "payload":"eventName"
         },
         {
           "content_type":"text",
-          "title":"Edit event page link.",
+          "title":"Link page.",
           "payload":"eventPage"
         },
         {
           "content_type":"text",
-          "title":"Invite people!",
+          "title":"Invite people.",
           "payload":"invite"
         },
         {
           "content_type":"text",
-          "title":"Delete the event",
+          "title":"View allergies.",
+          "payload":"allergy info"
+        },
+        {
+          "content_type":"text",
+          "title":"Delete it.",
           "payload":"delete"
         }
       ]
